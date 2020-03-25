@@ -31,8 +31,8 @@ module.exports = class ThunkyMap {
   _load (key, queue) {
     this.load(key, (err, val) => {
       const stored = this.loading.get(key)
-      this.loading.delete(val)
-      if (stored !== queue && !err) err = new Error('Deleted')
+      if (stored === queue) this.loading.delete(key)
+      else if (!err) err = new Error('Deleted')
       if (!err) this.cache.set(key, val)
       for (const cb of queue) cb(err, val)
     })
